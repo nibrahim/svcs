@@ -15,6 +15,7 @@ def test_init_existing():
     s0 = FileStorage("/tmp/test")
     assert os.path.exists("/tmp/test")
     s1 = FileStorage("/tmp/test")
+    shutil.rmtree("/tmp/test")
     
 
 
