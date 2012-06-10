@@ -1,5 +1,7 @@
 import os
 
+
+
 class Storage(object):
     def store_object(self, obj):
         raise NotImplementedError()
@@ -25,7 +27,14 @@ class FileStorage(Storage):
         f = open(location, "wb")
         f.write(content)
         f.close()
-        
+    
+    def get_object(self, address):
+        "Retrieves the object with the given address."
+        location = os.path.join(self.location, self.obj_dir, address)
+        with open(location) as f:
+            contents = f.read()
+        f = File.load(location)
+        return f
         
 
 
