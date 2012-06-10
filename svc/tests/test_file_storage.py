@@ -30,20 +30,13 @@ def test_store_file(file_store):
     assert os.path.exists(expected_obj), "File was not stored in expected location"
     
     
+def test_get_file(file_store):
+    "Store a file in the store and retrieve it. Then verify it."
+    f = File("This is a test string")
+    file_store.store_object(f)
+    
+    retrieved_file = file_store.get_object(f.id)
+    assert retrieved_file.contents == "This is a test string"
     
 
-
-    
-    
-    
-    
-    
-    
-    
-
-    
-
-
-    
-    
     
