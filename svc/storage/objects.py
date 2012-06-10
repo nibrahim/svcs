@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import json
 
 class Object(object): 
     def id(self):
@@ -17,5 +18,8 @@ class File(Object):
         return hashlib.sha1(self.contents).hexdigest()
 
     def serialise(self):
-        return base64.b64encode(self.contents)
+        content = {"type"    : "file",
+                   "content" : base64.b64encode(self.contents)}
+        return json.dumps(content)
+
         
