@@ -2,6 +2,8 @@ import glob
 import os
 import shutil
 
+import py
+
 from ..storage import FileStorage, File
 
 def test_initialisation():
@@ -18,12 +20,13 @@ def test_init_existing():
     s1 = FileStorage("/tmp/test")
     shutil.rmtree("/tmp/test")
 
-def test_create_file(file_store):
+def test_create_file():
     """Creates a file object and tests whether it is storing the
-    contents"""
+    contents."""
     f = File("This is a test string")
 
     assert f.contents == "This is a test string"
+
     
     
     
