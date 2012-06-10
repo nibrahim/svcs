@@ -35,6 +35,19 @@ def test_address_file():
     expected_hash = hashlib.sha1("This is a test string").hexdigest()
     assert f.id == expected_hash
 
+def test_store_file(file_store):
+    "Stores a file object in a FileStorage"
+    f = File("This is a test string")
+    file_store.store_object(f)
+    
+    # Manually inspect the storage area. This pokes into it using
+    # undocumented APIs.
+    expected_obj = file_store.location + "/objects/" + f.id
+    assert os.path.exists(expected_obj), "File was not stored in expected location"
+    
+    
+    
+
 
     
     
