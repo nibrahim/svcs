@@ -15,6 +15,7 @@ class FileStorage(Storage):
         self.obj_dir = "objects"
         if not os.path.isdir(location):
             os.mkdir(location)
+            os.mkdir(os.path.join(self.location, self.obj_dir))
 
     def store_object(self, obj):
         "Stores the serialised object in storage directory."
