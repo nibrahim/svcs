@@ -1,9 +1,10 @@
+import datetime
 import os
 import shutil
 
 import py
 
-from ..storage import FileStorage, File
+from ..storage import FileStorage, File, Commit
 
 def test_initialisation():
     "Initialises a storage object"
@@ -39,4 +40,24 @@ def test_get_file(file_store):
     assert retrieved_file.contents == "This is a test string"
     
 
+def test_store_commit(file_store):
+    "Stores a commit in a FileStorage"
+    f1, f2, f3 = File("Contents of file 1"), File("Contents of file 2"), File("Contents of file 3")
+    files = [["file1.txt", f1.id],
+             ["file2.txt", f2.id],
+             ["file3.txt", f3.id]]
+    message = "Commit message"
+    date = datetime.datetime.utcnow().replace(microsecond = 0)
+    committer = "noufal@nibrahim.net.in"
+    parent_commit = None
+    c = Commit(committer, message, date, parent_commit, files)
     
+    file_store.store_object(c)
+
+    expected_obj = file_store.location + "/objects/" + c.id
+    assert os.path.exists(expected_obj), "Commit was not stored in expected location"
+    
+    
+
+
+
