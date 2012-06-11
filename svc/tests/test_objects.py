@@ -1,4 +1,5 @@
 import base64
+import calendar
 import datetime
 import hashlib
 import json
@@ -54,7 +55,7 @@ def test_create_commit():
              ("file2.txt", File("Contents of file 2").id),
              ("file3.txt", File("Contents of file 3").id)]
     message = "Commit message"
-    date = datetime.datetime.now()
+    date = datetime.datetime.utcnow()
     committer = "noufal@nibrahim.net.in"
     parent_commit = None
     c = Commit(committer, message, date, parent_commit, files)
@@ -73,29 +74,31 @@ def test_validate_commit():
              ("file2.txt", File("Contents of file 2").id),
              ("file3.txt", File("Contents of file 3").id)]
 
+    t = datetime.datetime.utcnow()
+
     py.test.raises(BadData, 
-                   Commit, False, "message", datetime.datetime.now(), None, files)
+                   Commit, False, "message", t, None, files)
     
     py.test.raises(BadData,
-                   Commit, "noufal@nibrahim.net.in", 1, datetime.datetime.now(), None, files)
+                   Commit, "noufal@nibrahim.net.in", 1, t, None, files)
 
     py.test.raises(BadData, 
                    Commit, "noufal@nibrahim.net.in", "message", "1/June/2012", None, files)
 
     py.test.raises(BadData, 
-                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), "", files)
+                   Commit, "noufal@nibrahim.net.in", "message", t, "", files)
 
     py.test.raises(BadData, # Empty commit
-                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [])
+                   Commit, "noufal@nibrahim.net.in", "message", t, None, [])
 
     py.test.raises(BadData, # Bad commit data
-                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [(1,2)])
+                   Commit, "noufal@nibrahim.net.in", "message", t, None, [(1,2)])
 
     py.test.raises(BadData, # Bad commit data
-                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [("foo.txt",2)])
+                   Commit, "noufal@nibrahim.net.in", "message", t, None, [("foo.txt",2)])
 
     py.test.raises(BadData, # Bad commit data
-                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [File("das")])
+                   Commit, "noufal@nibrahim.net.in", "message", t, None, [File("das")])
 
 
 
@@ -106,7 +109,7 @@ def test_serialise_commit():
              ("file2.txt", File("Contents of file 2").id),
              ("file3.txt", File("Contents of file 3").id)]
     message = "Commit message"
-    date = datetime.datetime.now()
+    date = datetime.datetime.utcnow()
     committer = "noufal@nibrahim.net.in"
     parent_commit = None
     c = Commit(committer, message, date, parent_commit, files)
@@ -114,7 +117,7 @@ def test_serialise_commit():
     d = {"type" : "Commit",
          "files" : c.files,
          "message" : message,
-         "date" : str(date),
+         "date" : calendar.timegm(date.timetuple()),
          "committer" : committer,
          "parent" : ""}
     
@@ -129,7 +132,7 @@ def test_load_commit():
              ("file2.txt", File("Contents of file 2").id),
              ("file3.txt", File("Contents of file 3").id)]
     message = "Commit message"
-    date = datetime.datetime.now()
+    date = datetime.datetime.utcnow().replace(microsecond = 0)
     committer = "noufal@nibrahim.net.in"
     parent_commit = None
     c0 = Commit(committer, message, date, parent_commit, files)

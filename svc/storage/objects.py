@@ -1,4 +1,5 @@
 import base64
+import calendar
 import datetime
 import hashlib
 import json
@@ -102,7 +103,7 @@ class Commit(Object):
 
         data = {"files"     : self.files,
                 "message"   : self.message,
-                "date"      : str(self.date),
+                "date"      : calendar.timegm(self.date.timetuple()),
                 "committer" : self.committer,
                 "parent"    : parent}
 
