@@ -1,6 +1,7 @@
 import base64
 import datetime
 import hashlib
+import json
 
 import py
 
@@ -99,4 +100,28 @@ def test_validate_commit():
                    Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [File("das")])
 
 
+
+def test_serialise_commit():
+    """Verifies whether the Commit object is properly serialised"""
+
+    files = [("file1.txt", File("Contents of file 1")),
+             ("file2.txt", File("Contents of file 2")),
+             ("file3.txt", File("Contents of file 3"))]
+    message = "Commit message"
+    date = datetime.datetime.now()
+    committer = "noufal@nibrahim.net.in"
+    parent_commit = None
+    c = Commit(committer, message, date, parent_commit, files)
+    
+    d = {"type" : "Commit",
+         "files" : c.files,
+         "message" : message,
+         "date" : str(date),
+         "committer" : committer,
+         "parent" : ""}
+    
+    expected_serialised_data = json.dumps(d)
+    actual_serialised_data = c.serialise()
+    
+    assert expected_serialised_data == actual_serialised_data
     
