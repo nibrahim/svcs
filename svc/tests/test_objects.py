@@ -1,7 +1,8 @@
 import base64
+import datetime
 import hashlib
 
-from ..storage import File
+from ..storage import File, Commit
 
 def test_create_file():
     """Creates a file object and tests whether it is storing the
@@ -40,5 +41,29 @@ def test_load_file():
     f1 = File.load(s)
     assert f0.contents == f1.contents
     
+def test_create_commit():
+    """
+    Tries to create a commit and checks whether the contents are
+    stored properly.
+    """
+    # List of files to commit.
+    files = [("file1.txt", File("Contents of file 1")),
+             ("file2.txt", File("Contents of file 2")),
+             ("file3.txt", File("Contents of file 3"))]
+    message = "Commit message"
+    date = datetime.datetime.now()
+    committer = "noufal@nibrahim.net.in"
+    parent_commit = None
+    c = Commit(committer, message, date, parent_commit, *files)
+
+    assert c.date == date
+    assert c.committer == committer
+    assert c.parent == parent_commit
+
+    expected_files = [(x, y.id) for x,y in files]
+    assert c.files == expected_files
     
+
+
+
     
