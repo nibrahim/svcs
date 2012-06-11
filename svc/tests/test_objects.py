@@ -2,7 +2,9 @@ import base64
 import datetime
 import hashlib
 
-from ..storage import File, Commit
+import py
+
+from ..storage import File, Commit, BadData
 
 def test_create_file():
     """Creates a file object and tests whether it is storing the
@@ -63,6 +65,30 @@ def test_create_commit():
     expected_files = [(x, y.id) for x,y in files]
     assert c.files == expected_files
     
+def test_validate_commit():
+    """
+    Tries to instantiate a commit with bad data and makes sure that it
+    doesn't allow it.
+    """
+    files = [("file1.txt", File("Contents of file 1")),
+             ("file2.txt", File("Contents of file 2")),
+             ("file3.txt", File("Contents of file 3"))]
+
+    py.test.raises(BadData, 
+                   Commit, False, "message", datetime.datetime.now(), None, *files)
+    
+    py.test.raises(BadData,
+                   Commit, "noufal@nibrahim.net.in", 1, datetime.datetime.now(), None, *files)
+
+    py.test.raises(BadData, 
+                   Commit, "noufal@nibrahim.net.in", "message", "1/June/2012", None, *files)
+
+    py.test.raises(BadData, 
+                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), "", *files)
+
+    py.test.raises(BadData, 
+                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [])
+
 
 
 
