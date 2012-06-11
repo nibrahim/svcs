@@ -62,7 +62,7 @@ class File(Object):
         return self(base64.b64decode(data['content']))
 
 class Commit(Object):
-    def __init__(self, committer, message, date, parent_commit, files):
+    def __init__(self, committer, message, date, parent, files):
         # First validate data
         if not isinstance(committer, str):
             raise BadData("Bad committer '%s'"%committer)
@@ -70,9 +70,9 @@ class Commit(Object):
             raise BadData("Bad commit message '%s'"%message)
         if not isinstance(date, datetime.datetime):
             raise BadData("Bad commit date '%s'"%date)
-        if not (parent_commit == None or isinstance(parent_commit, Commit)):
+        if not (parent == None or isinstance(parent, Commit)):
             # None is a sentinel rather than a Boolean here
-            raise BadData("Bad commit parent '%s'", parent_commit)
+            raise BadData("Bad commit parent '%s'", parent)
         try:
             if not files:
                 raise BadData("Cannot create empty commit")
@@ -90,7 +90,7 @@ class Commit(Object):
         self.committer = committer
         self.message = message
         self.date = date
-        self.parent = parent_commit
+        self.parent = parent
         self.files = files
 
     def serialise(self):
