@@ -109,4 +109,13 @@ class Commit(Object):
 
         return super(Commit, self).serialise(data)
     
+    @classmethod
+    def load(self, sdata):
+        "Creates a Commit directly from serialised data."
+        data = super(Commit, self).deserialise(sdata)
+        data.pop("type")
+        data['date'] = datetime.datetime.utcfromtimestamp(data['date'])
+        if not data['parent']:
+            data['parent'] = None
+        return self(**data)
 

@@ -128,9 +128,9 @@ def test_serialise_commit():
     
 def test_load_commit(): 
     "Makes sure that serialisation and deserialisation is idempotent"
-    files = [("file1.txt", File("Contents of file 1").id),
-             ("file2.txt", File("Contents of file 2").id),
-             ("file3.txt", File("Contents of file 3").id)]
+    files = [[u"file1.txt", File("Contents of file 1").id],
+             [u"file2.txt", File("Contents of file 2").id],
+             [u"file3.txt", File("Contents of file 3").id]]
     message = "Commit message"
     date = datetime.datetime.utcnow().replace(microsecond = 0)
     committer = "noufal@nibrahim.net.in"
@@ -146,4 +146,4 @@ def test_load_commit():
     assert c0.parent == c1.parent
     assert c0.files == c1.files
     
-    
+
