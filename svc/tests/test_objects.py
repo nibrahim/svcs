@@ -86,10 +86,17 @@ def test_validate_commit():
     py.test.raises(BadData, 
                    Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), "", files)
 
-    py.test.raises(BadData, 
+    py.test.raises(BadData, # Empty commit
                    Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [])
 
+    py.test.raises(BadData, # Bad commit data
+                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [(1,2)])
 
+    py.test.raises(BadData, # Bad commit data
+                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [("foo.txt",2)])
+
+    py.test.raises(BadData, # Bad commit data
+                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [File("das")])
 
 
     
