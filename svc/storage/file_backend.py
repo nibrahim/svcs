@@ -1,6 +1,6 @@
 import os
 
-
+from .objects import Object
 
 class Storage(object):
     def store_object(self, obj):
@@ -33,7 +33,7 @@ class FileStorage(Storage):
         location = os.path.join(self.location, self.obj_dir, address)
         with open(location) as f:
             contents = f.read()
-        f = File.load(location)
+        f = Object.load(contents)
         return f
         
 
