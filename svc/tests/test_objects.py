@@ -64,6 +64,21 @@ def test_create_commit():
     assert c.committer == committer
     assert c.parent == parent_commit
     assert c.files == files
+
+def test_address_commit():
+    "Validates proper creation of Commit id"
+    files = [("file1.txt", File("Contents of file 1").id),
+             ("file2.txt", File("Contents of file 2").id),
+             ("file3.txt", File("Contents of file 3").id)]
+    message = "Commit message"
+    date = datetime.datetime.utcnow()
+    committer = "noufal@nibrahim.net.in"
+    parent_commit = None
+    c = Commit(committer, message, date, parent_commit, files)
+    
+    s = c.serialise()
+    assert c.id == hashlib.sha1(s).hexdigest()
+
     
 def test_validate_commit():
     """
