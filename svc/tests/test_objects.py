@@ -27,3 +27,18 @@ def test_serialise_file():
     expected_content = base64.b64encode("This is a test string")
     f.serialise() == expected_content
 
+
+def test_load_file():
+    """
+    Verifies whether a File can be loaded back from it's serialised
+    format.
+    """
+    
+    f0 = File("This is a test string")
+
+    s = f0.serialise()
+    f1 = File.load(s)
+    assert f0.contents == f1.contents
+    
+    
+    

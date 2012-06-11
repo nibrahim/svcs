@@ -34,7 +34,7 @@ class Object(object):
         """
         data = self.deserialise(sdata)
         typ = data["type"]
-        return types[typ].load(data)
+        return types[typ].load(sdata)
         
 
 
@@ -47,10 +47,12 @@ class File(Object):
         return super(File, self).id(self.contents)
 
     def serialise(self):
+        "Serialises the object into format that the store can use"
         content = {"content" : base64.b64encode(self.contents)}
         return super(File, self).serialise(content)
 
     @classmethod
-    def load(self, data):
-        "Creates a File directly from deserialised data"
+    def load(self, sdata):
+        "Creates a File directly from serialised data."
+        data = super(File, self).deserialise(sdata)
         return self(base64.b64decode(data['content']))
