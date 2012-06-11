@@ -56,3 +56,14 @@ class File(Object):
         "Creates a File directly from serialised data."
         data = super(File, self).deserialise(sdata)
         return self(base64.b64decode(data['content']))
+
+class Commit(Object):
+    def __init__(self, committer, message, date, parent_commit, *files):
+        self.committer = committer
+        self.message = message
+        self.date = date
+        self.parent = parent_commit
+        self.files = [(x, y.id) for x,y in files]
+
+    
+

@@ -1,2 +1,2 @@
 from .file_backend import FileStorage
-from .objects import File
+from .objects import File, Commit
