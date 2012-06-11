@@ -1,6 +1,10 @@
 import base64
+import datetime
 import hashlib
 import json
+
+class Error(Exception): pass
+class BadData(Error, TypeError): pass
 
 types = {}
 
@@ -59,6 +63,28 @@ class File(Object):
 
 class Commit(Object):
     def __init__(self, committer, message, date, parent_commit, *files):
+        # First validate data
+        if not isinstance(committer, str):
+            raise BadData("Bad committer '%s'"%committer)
+        if not isinstance(message, str):
+            raise BadData("Bad commit message '%s'"%message)
+        if not isinstance(date, datetime.datetime):
+            raise BadData("Bad commit date '%s'"%date)
+        if not (parent_commit == None or isinstance(parent_commit, Commit)):
+            # None is a sentinel rather than a Boolean here
+            raise BadData("Bad commit parent '%s'", parent_commit)
+        try:
+            for x, y in files:
+                if not isinstance(x, str):
+                    raise BadData("Bad filename '%s'"%x)
+                if not isinstance(y, File):
+                    raise BadData("Bad file '%s'"%y)
+        except BadData:
+            raise
+        except Exception:
+            raise BadData("Bad file list")
+
+
         self.committer = committer
         self.message = message
         self.date = date
