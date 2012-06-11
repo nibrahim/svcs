@@ -64,9 +64,9 @@ class File(Object):
 class Commit(Object):
     def __init__(self, committer, message, date, parent, files):
         # First validate data
-        if not isinstance(committer, str):
+        if not isinstance(committer, (str, unicode)):
             raise BadData("Bad committer '%s'"%committer)
-        if not isinstance(message, str):
+        if not isinstance(message, (str, unicode)):
             raise BadData("Bad commit message '%s'"%message)
         if not isinstance(date, datetime.datetime):
             raise BadData("Bad commit date '%s'"%date)
@@ -77,9 +77,9 @@ class Commit(Object):
             if not files:
                 raise BadData("Cannot create empty commit")
             for x, y in files:
-                if not isinstance(x, str):
+                if not isinstance(x, (str, unicode)):
                     raise BadData("Bad filename '%s'"%x)
-                if not isinstance(y, str):
+                if not isinstance(y, (str, unicode)):
                     raise BadData("Bad file id '%s'"%y)
         except BadData:
             raise
