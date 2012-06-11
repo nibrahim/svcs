@@ -125,3 +125,24 @@ def test_serialise_commit():
     
     assert expected_serialised_data == actual_serialised_data
     
+def test_load_commit(): 
+    "Makes sure that serialisation and deserialisation is idempotent"
+    files = [("file1.txt", File("Contents of file 1")),
+             ("file2.txt", File("Contents of file 2")),
+             ("file3.txt", File("Contents of file 3"))]
+    message = "Commit message"
+    date = datetime.datetime.now()
+    committer = "noufal@nibrahim.net.in"
+    parent_commit = None
+    c0 = Commit(committer, message, date, parent_commit, files)
+
+    s = c0.serialise()
+    c1 = Commit.load(s)
+
+    assert c0.message == c1.message
+    assert c0.date == c1.date
+    assert c0.committer == c1.committer
+    assert c0.parent == c1.parent
+    assert c0.files == c1.files
+    
+    
