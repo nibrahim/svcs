@@ -79,8 +79,8 @@ class Commit(Object):
             for x, y in files:
                 if not isinstance(x, str):
                     raise BadData("Bad filename '%s'"%x)
-                if not isinstance(y, File):
-                    raise BadData("Bad file '%s'"%y)
+                if not isinstance(y, str):
+                    raise BadData("Bad file id '%s'"%y)
         except BadData:
             raise
         except Exception:
@@ -91,7 +91,7 @@ class Commit(Object):
         self.message = message
         self.date = date
         self.parent = parent_commit
-        self.files = [(x, y.id) for x,y in files]
+        self.files = files
 
     def serialise(self):
         "Serialises the object into format that the store can use"

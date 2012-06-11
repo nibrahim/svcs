@@ -50,9 +50,9 @@ def test_create_commit():
     stored properly.
     """
     # List of files to commit.
-    files = [("file1.txt", File("Contents of file 1")),
-             ("file2.txt", File("Contents of file 2")),
-             ("file3.txt", File("Contents of file 3"))]
+    files = [("file1.txt", File("Contents of file 1").id),
+             ("file2.txt", File("Contents of file 2").id),
+             ("file3.txt", File("Contents of file 3").id)]
     message = "Commit message"
     date = datetime.datetime.now()
     committer = "noufal@nibrahim.net.in"
@@ -62,18 +62,16 @@ def test_create_commit():
     assert c.date == date
     assert c.committer == committer
     assert c.parent == parent_commit
-
-    expected_files = [(x, y.id) for x,y in files]
-    assert c.files == expected_files
+    assert c.files == files
     
 def test_validate_commit():
     """
     Tries to instantiate a commit with bad data and makes sure that it
     doesn't allow it.
     """
-    files = [("file1.txt", File("Contents of file 1")),
-             ("file2.txt", File("Contents of file 2")),
-             ("file3.txt", File("Contents of file 3"))]
+    files = [("file1.txt", File("Contents of file 1").id),
+             ("file2.txt", File("Contents of file 2").id),
+             ("file3.txt", File("Contents of file 3").id)]
 
     py.test.raises(BadData, 
                    Commit, False, "message", datetime.datetime.now(), None, files)
@@ -104,9 +102,9 @@ def test_validate_commit():
 def test_serialise_commit():
     """Verifies whether the Commit object is properly serialised"""
 
-    files = [("file1.txt", File("Contents of file 1")),
-             ("file2.txt", File("Contents of file 2")),
-             ("file3.txt", File("Contents of file 3"))]
+    files = [("file1.txt", File("Contents of file 1").id),
+             ("file2.txt", File("Contents of file 2").id),
+             ("file3.txt", File("Contents of file 3").id)]
     message = "Commit message"
     date = datetime.datetime.now()
     committer = "noufal@nibrahim.net.in"
@@ -127,9 +125,9 @@ def test_serialise_commit():
     
 def test_load_commit(): 
     "Makes sure that serialisation and deserialisation is idempotent"
-    files = [("file1.txt", File("Contents of file 1")),
-             ("file2.txt", File("Contents of file 2")),
-             ("file3.txt", File("Contents of file 3"))]
+    files = [("file1.txt", File("Contents of file 1").id),
+             ("file2.txt", File("Contents of file 2").id),
+             ("file3.txt", File("Contents of file 3").id)]
     message = "Commit message"
     date = datetime.datetime.now()
     committer = "noufal@nibrahim.net.in"
