@@ -94,6 +94,11 @@ class Commit(Object):
         self.parent = parent
         self.files = files
 
+    @property
+    def id(self):
+        return super(Commit, self).id(self.serialise())
+
+
     def serialise(self):
         "Serialises the object into format that the store can use"
         if self.parent == None:
