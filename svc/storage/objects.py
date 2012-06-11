@@ -93,5 +93,19 @@ class Commit(Object):
         self.parent = parent_commit
         self.files = [(x, y.id) for x,y in files]
 
+    def serialise(self):
+        "Serialises the object into format that the store can use"
+        if self.parent == None:
+            parent = ""
+        else:
+            parent = self.parent.id
+
+        data = {"files"     : self.files,
+                "message"   : self.message,
+                "date"      : str(self.date),
+                "committer" : self.committer,
+                "parent"    : parent}
+
+        return super(Commit, self).serialise(data)
     
 
