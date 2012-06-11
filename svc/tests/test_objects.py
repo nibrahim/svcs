@@ -56,7 +56,7 @@ def test_create_commit():
     date = datetime.datetime.now()
     committer = "noufal@nibrahim.net.in"
     parent_commit = None
-    c = Commit(committer, message, date, parent_commit, *files)
+    c = Commit(committer, message, date, parent_commit, files)
 
     assert c.date == date
     assert c.committer == committer
@@ -75,16 +75,16 @@ def test_validate_commit():
              ("file3.txt", File("Contents of file 3"))]
 
     py.test.raises(BadData, 
-                   Commit, False, "message", datetime.datetime.now(), None, *files)
+                   Commit, False, "message", datetime.datetime.now(), None, files)
     
     py.test.raises(BadData,
-                   Commit, "noufal@nibrahim.net.in", 1, datetime.datetime.now(), None, *files)
+                   Commit, "noufal@nibrahim.net.in", 1, datetime.datetime.now(), None, files)
 
     py.test.raises(BadData, 
-                   Commit, "noufal@nibrahim.net.in", "message", "1/June/2012", None, *files)
+                   Commit, "noufal@nibrahim.net.in", "message", "1/June/2012", None, files)
 
     py.test.raises(BadData, 
-                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), "", *files)
+                   Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), "", files)
 
     py.test.raises(BadData, 
                    Commit, "noufal@nibrahim.net.in", "message", datetime.datetime.now(), None, [])

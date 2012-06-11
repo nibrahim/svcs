@@ -62,7 +62,7 @@ class File(Object):
         return self(base64.b64decode(data['content']))
 
 class Commit(Object):
-    def __init__(self, committer, message, date, parent_commit, *files):
+    def __init__(self, committer, message, date, parent_commit, files):
         # First validate data
         if not isinstance(committer, str):
             raise BadData("Bad committer '%s'"%committer)
@@ -74,6 +74,8 @@ class Commit(Object):
             # None is a sentinel rather than a Boolean here
             raise BadData("Bad commit parent '%s'", parent_commit)
         try:
+            if not files:
+                raise BadData("Cannot create empty commit")
             for x, y in files:
                 if not isinstance(x, str):
                     raise BadData("Bad filename '%s'"%x)
