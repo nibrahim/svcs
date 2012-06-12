@@ -57,6 +57,23 @@ def test_store_commit(file_store):
     expected_obj = file_store.location + "/objects/" + c.id
     assert os.path.exists(expected_obj), "Commit was not stored in expected location"
     
+def test_store_tip(file_store):
+    "Tries to store a commit as the tip. Verifies storage and contents."
+    f1, f2, f3 = File("Contents of file 1"), File("Contents of file 2"), File("Contents of file 3")
+    files = [["file1.txt", f1.id],
+             ["file2.txt", f2.id],
+             ["file3.txt", f3.id]]
+    message = "Commit message"
+    date = datetime.datetime.utcnow().replace(microsecond = 0)
+    committer = "noufal@nibrahim.net.in"
+    parent_commit = None
+    c = Commit(committer, message, date, parent_commit, files)
+
+    file_store.update_tip(c)
+    expected_obj = os.path.join(file_store.location, "TIP")
+    assert os.path.exists(expected_obj), "Tip not stored"
+    assert open(expected_obj).read() == c.id
+    
     
 
 
