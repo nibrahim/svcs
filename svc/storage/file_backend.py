@@ -9,6 +9,8 @@ class Storage(object):
     def get_object(self, address):
         raise NotImplementedError()
 
+    def update_tip(self, commit):
+        raise NotImplementedError()
 
 class FileStorage(Storage):
     def __init__(self, location):
